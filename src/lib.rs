@@ -9,10 +9,9 @@ enum SetItem<ValueType> {
 }
 
 
-
+/// Tarjan's Union-Find Data structure
 pub struct DisjointSet<T: Clone>
 {
-//! Tarjan's Union-Find Data structure
     set_size: usize, 
 /// The structure saves the parent information of each subset in continuous 
 /// memory(a vec) for better performance.  
