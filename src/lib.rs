@@ -8,21 +8,23 @@ enum SetItem<ValueType> {
     Link(Box<SetItem<ValueType>>)
 }
 
-/* The structure saves the parent information of each subset in continuous 
- * memory(a vec) for better performance.
- *
- * Each T entry is mapped onto a usize tag.
- */
+
+
 pub struct DisjointSet<T: Clone>
 {
+//! Tarjan's Union-Find Data structure
     set_size: usize, 
+/// The structure saves the parent information of each subset in continuous 
+/// memory(a vec) for better performance.  
     parent: Vec<usize>,
+
+/// Each T entry is mapped onto a usize tag.
     map: HashMap<T, usize>
 }
 
 impl<T> DisjointSet<T> where T: Clone+Hash+Eq
 {
-    fn new() -> Self{
+    pub fn new() -> Self{
         DisjointSet{
             set_size: 0,
             parent: Vec::new(),
@@ -30,7 +32,7 @@ impl<T> DisjointSet<T> where T: Clone+Hash+Eq
         }
     }
 
-    fn make_set(&mut self, x: T){
+    pub fn make_set(&mut self, x: T){
         let mut len = &mut self.set_size;
         match self.map.get(&x) {
             Some(p) => return,
@@ -43,12 +45,12 @@ impl<T> DisjointSet<T> where T: Clone+Hash+Eq
         *len += 1;
     }
 
-    /* Returns Some(num), num is the tag of subset in which x is.
-     * If x is not in the data structure, it returns None.
-     * 
-     */
-    fn find(&mut self, x: T) -> Option<usize> 
+    
+    pub fn find(&mut self, x: T) -> Option<usize> 
     {
+    //! Returns Some(num), num is the tag of subset in which x is.
+    //! If x is not in the data structure, it returns None.    
+
         let mut pos: usize;
         match self.map.get(&x) {
             Some(p) => {pos = *p;},
@@ -69,12 +71,13 @@ impl<T> DisjointSet<T> where T: Clone+Hash+Eq
             n
         }
     }
-
-    /* Union the subsets to which x and y belong .
-     * 
-     */
-    fn union(&mut self, x: T, y: T) -> Result<usize, ()>
+     
+   
+    pub fn union(&mut self, x: T, y: T) -> Result<usize, ()>
     {
+        //! Union the subsets to which x and y belong.
+        //! If it returns Ok<u32>, it is the tag for unified subset.
+        //! it returns Err(), at least one of x and y is not in the disjoint-set.
         let x_root;
         let y_root;
         match self.find(x) {
